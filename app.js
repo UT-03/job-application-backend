@@ -1,20 +1,24 @@
 require('dotenv').config();
 
 const express = require('express');
-const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
 const HttpError = require('./util/HttpError');
+const userRoutes = require('./routes/User');
+const immigrationFirmRoutes = require('./routes/ImmigrationFirm');
 
 const app = express();
 
-app.use(bodyParser.json());
+app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
 
 // Handling cors errors
 app.use(cors());
 
 // Routes here
+app.use('/api/user', userRoutes);
+app.use('/api/immigration-firm', immigrationFirmRoutes);
 
 // Default=> If no route matches the url
 app.use((req, res, next) => {
@@ -28,10 +32,10 @@ app.use((error, req, res, next) => {
         return next(error);
     }
     res.status(error.code || 500);
-    res.json({ message: error.message || 'An unknown error occurred!' });
+    res.json({ message: error.message || 'Something went wrong, please try again later.' });
 });
 
-// Connecting to databse and starting the server
+// Connecting to database and starting the server
 mongoose
     .connect(process.env.MONGO_URI)
     .then(() => {

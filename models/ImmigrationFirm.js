@@ -7,7 +7,7 @@ const immigrationFirmSchema = new Schema({
     email: { type: String, required: true },
     pssword: { type: String, required: false },
     isGoogleSignedIn: { type: Boolean, required: true },
-    jobsPosted: [{ type: mongoose.Types.ObjectId, required: true, ref: 'Job' }]
+    jobsPosted: [{ type: mongoose.Types.ObjectId, required: true, ref: 'JobPosting' }]
 });
 
 module.exports = mongoose.model('ImmigrationFirm', immigrationFirmSchema);
