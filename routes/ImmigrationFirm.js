@@ -6,7 +6,7 @@ const checkAuth = require('../middlewares/checkAuth');
 
 const router = express.Router();
 
-router.get('/get-job-posting', checkAuth, immigrationFirmControllers.getJobPostingByImmigrationFirmId);
+router.get('/get-my-job-postings/:pageNumber', checkAuth, immigrationFirmControllers.getJobPostingByImmigrationFirmId);
 
 router.post('/new-job-posting',
     [

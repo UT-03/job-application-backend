@@ -7,6 +7,7 @@ const applicantSchema = new Schema({
     email: { type: String, required: true },
     password: { type: String, required: false },
     isGoogleSignedIn: { type: Boolean, required: true },
+    searchKeyWords: [{ type: String, required: true }],
     phoneNumber: { type: String, required: false },
     maritalStatus: { type: String, required: false },
     noOfChildren: { type: Number, required: false },

@@ -7,6 +7,7 @@ const cors = require('cors');
 const HttpError = require('./util/HttpError');
 const userRoutes = require('./routes/User');
 const immigrationFirmRoutes = require('./routes/ImmigrationFirm');
+const applicantRoutes = require('./routes/Applicant');
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use(cors());
 // Routes here
 app.use('/api/user', userRoutes);
 app.use('/api/immigration-firm', immigrationFirmRoutes);
+app.use('/api/applicant', applicantRoutes);
 
 // Default=> If no route matches the url
 app.use((req, res, next) => {

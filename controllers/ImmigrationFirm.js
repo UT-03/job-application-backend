@@ -9,25 +9,40 @@ const JobPosting = require('../models/JobPosting');
 const ImmigrationFirm = require('../models/ImmigrationFirm');
 
 const getJobPostingByImmigrationFirmId = async (req, res, next) => {
+    // Retrieving pageNumber from query params for pagination
+    const { pageNumber } = req.params;
+
     // Getting userId from req data
     const userId = req.userData.userId;
 
+    // Searching immigration firm with userId
     let existingImmigrationFirm;
     try {
-        existingImmigrationFirm = await ImmigrationFirm.findById(userId).populate('jobsPosted');
+        existingImmigrationFirm = await ImmigrationFirm.findById(userId).populate({
+            path: 'jobsPosted',
+            options: {
+                perDocumentLimit: 10,
+                skip: (pageNumber - 1) * 10
+            }
+        });
     } catch (err) {
         console.log(err);
         const error = new HttpError();
         return next(error);
     }
 
+    // This is highly unlikely, but provided to counter those who try to manipulate frontend
     if (!existingImmigrationFirm) {
-        const error = new HttpError('This account is not registered in our database, Please signup first', 404);
+        const error = new HttpError("This account is not registered in our database. Please sign up first.", 404);
         return next(error);
     }
 
+    // This tells frontend whether to ask for more data or not
+    let hasMoreData = existingImmigrationFirm.jobsPosted.length < 10 ? false : true;
+
     res.json({
-        jobsPosted: existingImmigrationFirm.jobsPosted
+        jobsPosted: existingImmigrationFirm.jobsPosted,
+        hasMoreData: hasMoreData
     })
 }
 

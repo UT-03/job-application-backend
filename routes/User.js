@@ -2,6 +2,7 @@ const express = require('express');
 const { check } = require('express-validator');
 
 const usersControllers = require('../controllers/User');
+const applicantControllers = require('../controllers/Applicant');
 
 const router = express.Router();
 
@@ -21,5 +22,7 @@ router.post('/signup',
 router.post('/login', usersControllers.login);
 
 router.post('/google-signin', usersControllers.googleSignin);
+
+router.get('/get-job-postings/:pageNumber', applicantControllers.getAllJobPostings);
 
 module.exports = router;
