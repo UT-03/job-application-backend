@@ -23,6 +23,6 @@ router.post('/login', usersControllers.login);
 
 router.post('/google-signin', usersControllers.googleSignin);
 
-router.get('/get-job-postings/:pageNumber', applicantControllers.getAllJobPostings);
+router.get('/search-jobs/:pageNumber', usersControllers.getSearchJobs);
 
 module.exports = router;

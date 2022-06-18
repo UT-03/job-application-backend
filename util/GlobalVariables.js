@@ -1,0 +1,62 @@
+const industries = {
+    101: 'Accounting & Finance',
+    102: 'Advertising & Marketing',
+    103: 'Agriculture, Forestry & Fishing',
+    104: 'Airlines & Aviation',
+    105: 'Arts, Fashion & Design',
+    106: 'Automotive & Vehicle Repair',
+    107: 'Banking & Financial Services',
+    108: 'Construction & Building Service',
+    109: 'Consulting & Project Management',
+    110: 'Customer Service & Call Centre',
+    111: 'Education & Training',
+    112: 'Engineering & Architecture',
+    113: 'Environment, Health & Safety',
+    114: 'Government & Public Sector',
+    115: 'Healthcare & Medical',
+    116: 'Hospitality, Tourism & Food Service',
+    117: 'Human Resources & Recruitment',
+    118: 'Humanitarian',
+    119: 'Information & Communication Technology',
+    120: 'Installation, Maintenance & Repair',
+    121: 'Insurance',
+    122: 'Land Use & Environmental Management',
+    123: 'Legal',
+    124: 'Library & Records Management',
+    125: 'Management',
+    126: 'Manufacturing',
+    127: 'Marine',
+    128: 'Media & Corporate Communications',
+    129: 'Mining, Resources & Energy ',
+    130: 'Procurement, Logistics & Supply Chain',
+    131: 'Quality Assurance',
+    132: 'Railway & Railtrack',
+    133: 'Real Estate',
+    134: 'Religion',
+    135: 'Research, Monitoring & Evaluation',
+    136: 'Retail',
+    137: 'Sales and Business Development',
+    138: 'Scientific',
+    139: 'Secretarial Administrative & Clerical',
+    140: 'Security & Armed Forces',
+    141: 'Sports & Leisure',
+    142: 'Utilities'
+};
+
+const canadaProvinces = {
+    300: 'Alberta',
+    301: 'British Columbia',
+    302: 'Manitoba',
+    303: 'New Brunswick',
+    304: 'Newfoundland and Labrador',
+    305: 'Nova Scotia',
+    306: 'Ontario',
+    307: 'Prince Edward Island',
+    308: 'Quebec',
+    309: 'Saskatchewan'
+};
+
+module.exports = {
+    industries,
+    canadaProvinces
+}

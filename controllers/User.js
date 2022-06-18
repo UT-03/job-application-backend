@@ -5,6 +5,8 @@ const jwt = require('jsonwebtoken');
 const HttpError = require('../util/HttpError');
 const Applicant = require('../models/Applicant');
 const ImmigrationFirm = require('../models/ImmigrationFirm');
+const JobPosting = require('../models/JobPosting');
+const { canadaProvinces, industries } = require('../util/GlobalVariables');
 
 const signup = async (req, res, next) => {
     // If inputs are invalid
@@ -229,8 +231,60 @@ const googleSignin = async (req, res, next) => {
         })
 }
 
+const getSearchJobs = async (req, res, next) => {
+    const { pageNumber } = req.params;
+
+    const { keyWordQuery, industryQuery, locationQuery } = req.query;
+
+    let searchJobs;
+    try {
+        searchJobs = await JobPosting.find().skip((pageNumber - 1) * 10).limit(10)
+    } catch (err) {
+        console.log(err);
+        const error = new HttpError();
+        return next(error);
+    }
+
+    // This tells frontend whether to ask for more data or not
+    let hasMoreData = searchJobs.length < 10 ? false : true;
+
+    let responseData = [];
+    if (keyWordQuery || industryQuery || locationQuery) {
+        searchJobs.forEach(job => {
+            let isValid = true;
+
+            if (keyWordQuery) {
+                if (!job.keyWords.includes(keyWordQuery))
+                    isValid = false;
+            }
+
+            if (locationQuery && isValid) {
+                if (job.jobLocation !== canadaProvinces[locationQuery])
+                    isValid = false;
+            }
+
+            if (industryQuery && isValid) {
+                if (job.industry !== industries[industryQuery])
+                    isValid = false;
+            }
+
+            if (isValid)
+                responseData.push(job);
+        })
+    }
+    else {
+        responseData = searchJobs;
+    }
+
+    res.json({
+        searchJobs: responseData,
+        hasMoreData: hasMoreData
+    });
+}
+
 module.exports = {
     signup,
     login,
-    googleSignin
+    googleSignin,
+    getSearchJobs
 }
