@@ -17,6 +17,7 @@ const applicantSchema = new Schema({
     areaOfInterest: { type: String, required: false },
     workExperience: { type: String, required: false },
     highestLevelOfEducation: { type: String, required: false },
+    resume: [{ type: String, required: true }],
     nameOfReference1: { type: String, required: false },
     emailOfReference1: { type: String, required: false },
     phoneNumberOfReference1: { type: String, required: false },

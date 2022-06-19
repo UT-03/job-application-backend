@@ -57,7 +57,9 @@ const signup = async (req, res, next) => {
             name: name,
             email: email,
             password: hashedPassword,
-            isGoogleSignedIn: false
+            isGoogleSignedIn: false,
+            searchKeyWords: [],
+            resume: []
         });
     }
     else if (userType === 'immigration-firm') {

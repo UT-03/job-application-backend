@@ -6,6 +6,12 @@ const checkAuth = require('../middlewares/checkAuth');
 
 const router = express.Router();
 
+router.get('/profile-data', checkAuth, applicantControllers.getProfileData);
 
+router.post('/update-profile-data', checkAuth, applicantControllers.updateProfileData);
+
+router.patch('/update-resume-url', checkAuth, applicantControllers.updateResumeUrl);
+
+router.delete('/delete-resume', checkAuth, applicantControllers.deleteResume);
 
 module.exports = router;
