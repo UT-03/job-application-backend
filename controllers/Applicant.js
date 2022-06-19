@@ -1,5 +1,6 @@
 const Applicant = require("../models/Applicant");
 const HttpError = require("../util/HttpError");
+const { checkIsProfileComplete } = require("../util/utilityFuncs");
 
 const getProfileData = async (req, res, next) => {
     const userId = req.userData.userId;
@@ -71,7 +72,7 @@ const updateResumeUrl = async (req, res, next) => {
 
     let existingApplicant;
     try {
-        existingApplicant = await Applicant.findById(userId);
+        existingApplicant = await Applicant.findById(userId).select('resume');
     } catch (err) {
         console.log(err);
         const error = new HttpError();
@@ -105,7 +106,7 @@ const deleteResume = async (req, res, next) => {
 
     let existingApplicant;
     try {
-        existingApplicant = await Applicant.findById(userId);
+        existingApplicant = await Applicant.findById(userId).select('resume');
     } catch (err) {
         console.log(err);
         const error = new HttpError();
@@ -135,9 +136,34 @@ const deleteResume = async (req, res, next) => {
     })
 }
 
+const isProfileComplete = async (req, res, next) => {
+    const userId = req.userData.userId;
+
+    let existingApplicant;
+    try {
+        existingApplicant = await Applicant.findById(userId);
+    } catch (err) {
+        console.log(err);
+        const error = new HttpError();
+        return next(error);
+    }
+
+    if (!existingApplicant) {
+        const error = new HttpError('This user is not registered in our database. Please try signup.', 404);
+        return next(error);
+    }
+
+    let isProfileComplete = checkIsProfileComplete(existingApplicant);
+
+    res.json({
+        isProfileComplete: isProfileComplete
+    })
+}
+
 module.exports = {
     getProfileData,
     updateProfileData,
     updateResumeUrl,
-    deleteResume
+    deleteResume,
+    isProfileComplete
 }

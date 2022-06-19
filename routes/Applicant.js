@@ -14,4 +14,6 @@ router.patch('/update-resume-url', checkAuth, applicantControllers.updateResumeU
 
 router.delete('/delete-resume', checkAuth, applicantControllers.deleteResume);
 
+router.get('/is-profile-complete', checkAuth, applicantControllers.isProfileComplete);
+
 module.exports = router;
