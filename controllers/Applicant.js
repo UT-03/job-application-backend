@@ -1,4 +1,5 @@
 const Applicant = require("../models/Applicant");
+const JobApplication = require("../models/JobApplication");
 const HttpError = require("../util/HttpError");
 const { checkIsProfileComplete } = require("../util/utilityFuncs");
 
@@ -145,7 +146,7 @@ const deleteResume = async (req, res, next) => {
     res.json({
         message: "url deleted"
     })
-}
+};
 
 const isProfileComplete = async (req, res, next) => {
     const userId = req.userData.userId;
@@ -169,6 +170,75 @@ const isProfileComplete = async (req, res, next) => {
     res.json({
         isProfileComplete: isProfileComplete
     })
+};
+
+const applyForJob = async (req, res, next) => {
+    const userId = req.userData.userId;
+
+    const { jobId } = req.params;
+
+    const { requestObj, selectedReferencesIndex, selectedResume } = req.body;
+
+    let existingApplicant;
+    try {
+        existingApplicant = await Applicant.findById(userId);
+    } catch (err) {
+        console.log(err);
+        const error = new HttpError();
+        return next(error);
+    }
+
+    if (!existingApplicant) {
+        const error = new HttpError('This user is not registered in our database, Please try signup first.', 404);
+        return next(error);
+    }
+
+    const byPassFields = ['email', 'password', 'isGoogleSignedIn', 'resume', 'references']
+    for (const key in requestObj) {
+        if (!byPassFields.includes(key)) {
+            existingApplicant[key] = requestObj[key];
+        }
+
+        if (key === 'references') {
+            let references$ = [];
+            requestObj[key].forEach(ref => {
+                if (ref !== '' && ref.email !== '' && ref.phoneNumber !== '')
+                    references$.push(ref);
+            });
+
+            existingApplicant.references = references$;
+        }
+    }
+
+    try {
+        await existingApplicant.save();
+    }
+    catch (err) {
+        console.log(err);
+        const error = new HttpError();
+        return next(error);
+    }
+
+    console.log(requestObj, selectedReferencesIndex, selectedResume);
+
+    const references = selectedReferencesIndex.map(index => requestObj.references[index]);
+
+    const newJobApplication = new JobApplication({
+        jobId: jobId,
+        applicantProfileId: existingApplicant,
+        references: references,
+        resume: selectedResume
+    })
+
+    try {
+        await newJobApplication.save();
+    } catch (err) {
+        console.log(err);
+        const error = new HttpError();
+        return next(error);
+    }
+
+    res.json({ message: "Applied for job" });
 }
 
 module.exports = {
@@ -176,5 +246,6 @@ module.exports = {
     updateProfileData,
     updateResumeUrl,
     deleteResume,
-    isProfileComplete
+    isProfileComplete,
+    applyForJob
 }
