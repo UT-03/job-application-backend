@@ -8,7 +8,8 @@ const jobPostingFirmSchema = new Schema({
     jobLocation: { type: String, required: true },
     industry: { type: String, required: true },
     keyWords: [{ type: String, required: false }],
-    postedBy: { type: mongoose.Types.ObjectId, required: true, ref: 'ImmigrationFirm' }
+    postedBy: { type: mongoose.Types.ObjectId, required: true, ref: 'ImmigrationFirm' },
+    jobApplications: [{ type: mongoose.Types.ObjectId, required: true, ref: 'Job Application' }]
 });
 
 module.exports = mongoose.model('JobPosting', jobPostingFirmSchema);

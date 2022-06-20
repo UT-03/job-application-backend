@@ -1,7 +1,9 @@
 const Applicant = require("../models/Applicant");
 const JobApplication = require("../models/JobApplication");
+const JobPosting = require("../models/JobPosting");
 const HttpError = require("../util/HttpError");
 const { checkIsProfileComplete } = require("../util/utilityFuncs");
+const mongoose = require('mongoose');
 
 const getProfileData = async (req, res, next) => {
     const userId = req.userData.userId;
@@ -230,15 +232,35 @@ const applyForJob = async (req, res, next) => {
         resume: selectedResume
     })
 
+    let existingJobPosting;
     try {
-        await newJobApplication.save();
+        existingJobPosting = await JobPosting.findById(jobId);
     } catch (err) {
         console.log(err);
         const error = new HttpError();
         return next(error);
     }
 
-    res.json({ message: "Applied for job" });
+    if (!existingJobPosting) {
+        const error = new HttpError();
+        return next(error);
+    }
+
+    existingJobPosting.jobApplications.push(newJobApplication);
+
+    try {
+        const sess = await mongoose.startSession();
+        sess.startTransaction();
+        await newJobApplication.save({ session: sess });
+        await existingJobPosting.save({ session: sess });
+        await sess.commitTransaction();
+    } catch (err) {
+        console.log(err);
+        const error = new HttpError();
+        return next(error);
+    }
+
+    res.json({ message: "Applied for the job" });
 }
 
 module.exports = {
