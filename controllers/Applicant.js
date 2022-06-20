@@ -45,9 +45,20 @@ const updateProfileData = async (req, res, next) => {
         return next(error);
     }
 
+    const byPassFields = ['email', 'password', 'isGoogleSignedIn', 'resume', 'references']
     for (const key in data) {
-        if (key.toString() !== 'email' && key.toString() !== 'password' && key.toString() !== 'isGoogleSignedIn' && key.toString() !== 'resume') {
+        if (!byPassFields.includes(key)) {
             existingApplicant[key] = data[key];
+        }
+
+        if (key === 'references') {
+            let references$ = [];
+            data[key].forEach(ref => {
+                if (ref !== '' && ref.email !== '' && ref.phoneNumber !== '')
+                    references$.push(ref);
+            });
+
+            existingApplicant.references = references$;
         }
     }
 

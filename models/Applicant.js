@@ -18,15 +18,11 @@ const applicantSchema = new Schema({
     workExperience: { type: String, required: false },
     highestLevelOfEducation: { type: String, required: false },
     resume: [{ type: String, required: true }],
-    nameOfReference1: { type: String, required: false },
-    emailOfReference1: { type: String, required: false },
-    phoneNumberOfReference1: { type: String, required: false },
-    nameOfReference2: { type: String, required: false },
-    emailOfReference2: { type: String, required: false },
-    phoneNumberOfReference2: { type: String, required: false },
-    nameOfReference3: { type: String, required: false },
-    emailOfReference3: { type: String, required: false },
-    phoneNumberOfReference3: { type: String, required: false }
+    references: [{
+        name: { type: String, required: true },
+        email: { type: String, required: true },
+        phoneNumber: { type: String, required: true }
+    }]
 });
 
 module.exports = mongoose.model('Applicant', applicantSchema);
