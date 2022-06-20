@@ -85,7 +85,7 @@ const signup = async (req, res, next) => {
     let token;
     try {
         token = jwt.sign(
-            { userId: newUser.id },
+            { userId: newUser._id },
             `${process.env.SECRET_TOKEN}`
         );
     } catch (err) {
@@ -99,7 +99,8 @@ const signup = async (req, res, next) => {
         .status(201)
         .json({
             token: token,
-            userType: userType
+            userType: userType,
+            userId: newUser.id
         })
 }
 
@@ -156,7 +157,7 @@ const login = async (req, res, next) => {
     let token;
     try {
         token = jwt.sign(
-            { userId: existingUser.id },
+            { userId: existingUser._id },
             `${process.env.SECRET_TOKEN}`
         );
     } catch (err) {
@@ -170,7 +171,8 @@ const login = async (req, res, next) => {
         .status(200)
         .json({
             token: token,
-            userType: userType
+            userType: userType,
+            userId: existingUser._id
         })
 }
 
@@ -216,7 +218,7 @@ const googleSignin = async (req, res, next) => {
     let token;
     try {
         token = jwt.sign(
-            { userId: existingUser.id },
+            { userId: existingUser._id },
             `${process.env.SECRET_TOKEN}`
         );
     } catch (err) {
@@ -229,7 +231,8 @@ const googleSignin = async (req, res, next) => {
         .status(200)
         .json({
             token: token,
-            userType: userType
+            userType: userType,
+            userId: existingUser._id
         })
 }
 
