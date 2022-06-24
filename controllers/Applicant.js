@@ -22,8 +22,6 @@ const getProfileData = async (req, res, next) => {
         return next(error);
     }
 
-    console.log(existingApplicant);
-
     res.json({
         applicantProfileData: existingApplicant
     })
@@ -31,8 +29,6 @@ const getProfileData = async (req, res, next) => {
 
 const updateProfileData = async (req, res, next) => {
     const { ...data } = req.body;
-
-    console.log(data);
 
     const userId = req.userData.userId;
 
@@ -152,30 +148,6 @@ const deleteResume = async (req, res, next) => {
     })
 };
 
-const isProfileComplete = async (req, res, next) => {
-    const userId = req.userData.userId;
-
-    let existingApplicant;
-    try {
-        existingApplicant = await Applicant.findById(userId);
-    } catch (err) {
-        console.log(err);
-        const error = new HttpError();
-        return next(error);
-    }
-
-    if (!existingApplicant) {
-        const error = new HttpError('This user is not registered in our database. Please try signup.', 404);
-        return next(error);
-    }
-
-    let isProfileComplete = checkIsProfileComplete(existingApplicant);
-
-    res.json({
-        isProfileComplete: isProfileComplete
-    })
-};
-
 const applyForJob = async (req, res, next) => {
     const userId = req.userData.userId;
 
@@ -223,8 +195,6 @@ const applyForJob = async (req, res, next) => {
         return next(error);
     }
 
-    console.log(requestObj, selectedReferencesIndex, selectedResume);
-
     const references = selectedReferencesIndex.map(index => requestObj.references[index]);
 
     const newJobApplication = new JobApplication({
@@ -270,6 +240,5 @@ module.exports = {
     updateProfileData,
     updateResumeUrl,
     deleteResume,
-    isProfileComplete,
     applyForJob
 }

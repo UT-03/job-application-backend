@@ -14,8 +14,6 @@ router.patch('/update-resume-url', checkAuth, applicantControllers.updateResumeU
 
 router.delete('/delete-resume', checkAuth, applicantControllers.deleteResume);
 
-router.get('/is-profile-complete', checkAuth, applicantControllers.isProfileComplete);
-
 router.post('/apply-for-job/:jobId', checkAuth, applicantControllers.applyForJob);
 
 module.exports = router;
