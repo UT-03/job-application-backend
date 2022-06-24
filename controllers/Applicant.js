@@ -2,7 +2,6 @@ const Applicant = require("../models/Applicant");
 const JobApplication = require("../models/JobApplication");
 const JobPosting = require("../models/JobPosting");
 const HttpError = require("../util/HttpError");
-const { checkIsProfileComplete } = require("../util/utilityFuncs");
 const mongoose = require('mongoose');
 
 const getProfileData = async (req, res, next) => {
