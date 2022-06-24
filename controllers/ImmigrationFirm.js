@@ -170,7 +170,7 @@ const deleteJobPosting = async (req, res, next) => {
         return next(error);
     }
 
-    if (jobPostingToBeDeleted.postedBy._id.toString() !== req.userData.userId.toString()) {
+    if (jobPostingToBeDeleted.postedBy._id.toString() !== userId.toString()) {
         const error = new HttpError('You are not allowed to delete this Job Posting.', 401);
         return next(error);
     }
@@ -192,9 +192,53 @@ const deleteJobPosting = async (req, res, next) => {
     res.json({ message: "Job Posting deleted!" });
 }
 
+const getApplicantProfileData = async (req, res, next) => {
+    let userId = req.userData.userId;
+
+    const { jobId, pageNumber } = req.params;
+
+    let existingJobPosting;
+    try {
+        existingJobPosting = await JobPosting
+            .findById(jobId)
+            .select('jobApplications postedBy')
+            .populate({
+                path: 'jobApplications',
+                options: {
+                    perDocumentLimit: 10,
+                    skip: (pageNumber - 1) * 10
+                },
+                populate: {
+                    path: 'applicantProfile',
+                    select: '-password -isGoogleSignedIn -searchKeyWords -resume -references'
+                }
+            })
+    } catch (err) {
+        console.log(err);
+        const error = new HttpError();
+        return next(error);
+    }
+
+    if (!existingJobPosting) {
+        const error = new HttpError();
+        return next(error);
+    }
+
+    if (userId.toString() !== existingJobPosting.postedBy.toString()) {
+        const error = new HttpError('You are not authorised to access this information.', 406);
+        return next(error);
+    }
+
+    res.json({
+        jobApplications: existingJobPosting.jobApplications,
+        hasMoreData: existingJobPosting.jobApplications.length < 10 ? false : true
+    });
+}
+
 module.exports = {
     getJobPostingByImmigrationFirmId,
     addJobPosting,
     editJobPosting,
-    deleteJobPosting
+    deleteJobPosting,
+    getApplicantProfileData
 }

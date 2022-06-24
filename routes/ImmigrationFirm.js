@@ -44,4 +44,6 @@ router.patch('/edit-job-posting',
 
 router.delete('/delete-job-posting', checkAuth, immigrationFirmControllers.deleteJobPosting);
 
+router.get('/get-job-applicants-details/:jobId/:pageNumber', checkAuth, immigrationFirmControllers.getApplicantProfileData);
+
 module.exports = router;

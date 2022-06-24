@@ -32,6 +32,8 @@ const getProfileData = async (req, res, next) => {
 const updateProfileData = async (req, res, next) => {
     const { ...data } = req.body;
 
+    console.log(data);
+
     const userId = req.userData.userId;
 
     let existingApplicant;
@@ -227,7 +229,7 @@ const applyForJob = async (req, res, next) => {
 
     const newJobApplication = new JobApplication({
         jobId: jobId,
-        applicantProfileId: existingApplicant,
+        applicantProfile: existingApplicant,
         references: references,
         resume: selectedResume
     })

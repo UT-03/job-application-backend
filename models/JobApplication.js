@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 const jobApplicationSchema = new Schema({
     jobId: { type: mongoose.Types.ObjectId, required: true, ref: 'JobPosting' },
-    applicantProfileId: { type: mongoose.Types.ObjectId, required: true, ref: 'Applicant' },
+    applicantProfile: { type: mongoose.Types.ObjectId, required: true, ref: 'Applicant' },
     references: [{
         name: { type: String, required: true },
         email: { type: String, required: true },
