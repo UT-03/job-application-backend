@@ -12,10 +12,11 @@ const applicantSchema = new Schema({
     maritalStatus: { type: String, required: false },
     noOfChildren: { type: Number, required: false },
     countryOfResidence: { type: String, required: false },
-    provinceOfCanadaWhereInterestedToWork: { type: String, required: false },
+    provincesOfCanadaWhereInterestedToWork: [{ type: String, required: false }],
     statusInCountryOfResidence: { type: String, required: false },
     areaOfInterest: { type: String, required: false },
     workExperience: { type: String, required: false },
+    salaryExpectation: { type: Number, required: false },
     highestLevelOfEducation: { type: String, required: false },
     resume: [{ type: String, required: true }],
     references: [{
