@@ -59,7 +59,8 @@ const signup = async (req, res, next) => {
             password: hashedPassword,
             isGoogleSignedIn: false,
             searchKeyWords: [],
-            resume: []
+            resume: [],
+            references: []
         });
     }
     else if (userType === 'immigration-firm') {
