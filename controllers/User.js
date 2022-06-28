@@ -127,7 +127,6 @@ const login = async (req, res, next) => {
 
     // If user does not exist
     if (!existingUser) {
-        console.log(err);
         const error = new HttpError('User does not exist, please try signin instead.', 404);
         return next(error);
     }
