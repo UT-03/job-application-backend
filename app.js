@@ -46,7 +46,7 @@ mongoose
         app.listen(PORT);
     })
     .then(() => {
-        console.log(`Server started at http://localhost:${PORT}`);
+        console.log(`Server started at port ${PORT}`);
     })
     .catch(err => {
         console.log(err);
