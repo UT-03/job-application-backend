@@ -37,15 +37,16 @@ app.use((error, req, res, next) => {
     res.json({ message: error.message || 'Something went wrong, please try again later.' });
 });
 
+const PORT = process.env.PORT || 5000;
 // Connecting to database and starting the server
 mongoose
     .connect(process.env.MONGO_URI)
     .then(() => {
         console.log("Connected to database!")
-        app.listen(process.env.PORT);
+        app.listen(PORT);
     })
     .then(() => {
-        console.log(`Server started at http://localhost:${process.env.PORT}`);
+        console.log(`Server started at http://localhost:${PORT}`);
     })
     .catch(err => {
         console.log(err);
